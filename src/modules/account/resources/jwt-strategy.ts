@@ -31,6 +31,37 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       return done(new UnauthorizedException(), false);
     }
 
+    // valid session
+    /*
+    const session = await this.acountService.getOneUserSessionByToken(
+      authorization
+    );*/
+ 
+    /*
+    if (!session || session.user.id !== payload.user.id || !session.user.isActive) {
+      return done(new UnauthorizedException(), false);
+    }
+
+    const acessWorkspace = session.user.acessWorkspaces.find(acces => {
+      return acces['isActive'] && acces['isDefault']
+    });
+ 
+    const sessionValid = {
+      account: await getRepository(Account).findOne(
+        payload.account.id
+      ),
+      workspace: await getRepository(Workspace).findOne(
+        acessWorkspace['workspace']
+      ),
+      user: session.user,
+    };    
+
+    if (!sessionValid || !sessionValid.workspace) {
+      return done(new UnauthorizedException(), false);
+    }
+
+    done(null, sessionValid);*/
+
     done(null)
   }
 }

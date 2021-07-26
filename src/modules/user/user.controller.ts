@@ -25,5 +25,24 @@ export class UserController extends BaseController {
   ) {
     super(userService);
   }
+/*
+  @UseGuards(AuthGuard())
+  @Get('/:userId')
+  @UsePipes(new ValidationPipe({ whitelist: true }))
+  async getOneUser(
+    @Param('userId') userId: string,
+  ): Promise<User> {
+    return await this.userService.getOneUserById(userId);
+  }
 
+  @UseGuards(AuthGuard())
+  @Put('/:userId')
+  @UsePipes(new ValidationPipe({ whitelist: true }))
+  async updateOneUser(
+    @Param('userId') userId: string,
+    @Body() user: User
+  ): Promise<User> {
+    user.id = userId;
+    return await this.userService.updateOneUserById(user);
+  }*/
 }
