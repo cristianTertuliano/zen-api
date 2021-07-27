@@ -39,7 +39,7 @@ export class UserProfessional extends BaseResourceEntity {
   @IsNotEmpty()
   @IsString()
   @RelationId((userProfessional: UserProfessional) => userProfessional.user)
-  usertId: string;
+  userId: string;
 
   @Column()
   @IsNotEmpty()
@@ -56,5 +56,5 @@ export class UserProfessional extends BaseResourceEntity {
   @Column('enum', { enum: TypeProfessional })
   @IsNotEmpty()
   @IsEnum(TypeProfessional)
-  professionalType: TypeProfessional;
+  type: TypeProfessional;
 }

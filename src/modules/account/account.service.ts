@@ -8,14 +8,11 @@ import { getRepository, Repository } from 'typeorm';
 
 import { BaseService } from '@core/base/base-service';
 import { UserService } from '@module/user/user.service';
+import { EmailAccountService } from '@module/email/email-account.service';
 // import { JwtPayload } from '@module/account/resources/jwt-payload.interface';
-
-import { SignupDto } from 'src/shared/dto/account/signup.dto';
 
 import { User } from '@core/entity/user/user.entity';
 import { Account } from '@core/entity/account/account.entity';
-
-import { EmailAccountService } from '@module/email/email-account.service';
 
 @Injectable()
 export class AccountService extends BaseService{
@@ -33,20 +30,17 @@ export class AccountService extends BaseService{
   * @remarks
   * This method is async.
   *
-  * @param signupDto
-  * @returns The account object
+  * @param signup
+  * @returns The account
   *
-*/
-  public async create(
-    signupDto: SignupDto
-
-  ): Promise<Account> {
+*/  
+  public async create(signup: any): Promise<Account> {
 
     if (await getRepository(User).findOne({
-      email: signupDto.email
+      email: signup.email
     })) {
       throw new ConflictException(
-        'Email '+ signupDto.email +' já esta cadastrado'
+        'Email '+ signup.email +' já esta cadastrado'
       );
     }
 
@@ -56,8 +50,8 @@ export class AccountService extends BaseService{
     });
 
     // create user
-    signupDto.accountId = account.id;
-    account.user = await this.userService.create(signupDto);
+    signup.accountId = account.id;
+    account.user = await this.userService.create(signup);
 
     // send email
     this.emailAccountService.sendEmailWelcome({
