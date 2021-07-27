@@ -6,16 +6,15 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtSecret } from '@core/config/jwt-secret.config';
 import { JwtStrategy } from '@module/account/resources/jwt-strategy';
 
-import { UserRepository } from '@module/user/resources/user.repository';
- 
 import { Account } from '@core/entity/account/account.entity';
-import { Email } from '@core/entity/email/email.entity';
 
 import { AccountController } from '@module/account/account.controller';
 
 import { AccountService } from '@module/account/account.service';
 import { EmailAccountService } from '@module/email/email-account.service';
-
+import { UserService } from '@module/user/user.service';
+import { Email } from '@core/entity/email/email.entity';
+import { User } from '@core/entity/user/user.entity';
 
 @Module({
   imports: [
@@ -30,20 +29,21 @@ import { EmailAccountService } from '@module/email/email-account.service';
     }),
     TypeOrmModule.forFeature([
       Account,
-      UserRepository,
-      Email
+      User,
+      Email,
     ]),
   ],
   controllers: [AccountController],
   providers: [
     AccountService,
-    JwtStrategy,
     EmailAccountService,
+    UserService,
+    JwtStrategy,    
   ],
   exports: [
     AccountService,
+    PassportModule,
     JwtStrategy,
-    PassportModule
   ]
 })
 export class AccountModule {}

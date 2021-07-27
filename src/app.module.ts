@@ -9,6 +9,7 @@ import { GeneralsModule } from '@general/generals.module';
 import { AccountModule } from '@module/account/account.module';
 import { UserModule } from '@module/user/user.module';
 import { EmailModule } from '@module/email/email.module';
+import { PatientModule } from '@module/patient/patient.module';
 
 
 @Module({
@@ -22,6 +23,7 @@ import { EmailModule } from '@module/email/email.module';
     AccountModule,
     UserModule,
     EmailModule,
+    PatientModule,
 
     // shared all
     GeneralsModule,

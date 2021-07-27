@@ -27,7 +27,7 @@ export class EmailAccountService extends EmailService {
   * @param object
   * @returns void
   *
- 
+*/
   async sendEmailWelcome(emailWelcome: {
     creatorId: string,
     accountId: string,
@@ -59,6 +59,5 @@ export class EmailAccountService extends EmailService {
         template: template
       });
     }
-  }*/   
-
+  }
 }
