@@ -14,15 +14,15 @@ import { User } from '@core/entity/user/user.entity';
 
 import { BaseController } from '@core/base/base-controller';
 
-import { UserService } from '@module/user/user.service';
+import { PatientService } from '@module/patient/patient.service';
  
 
-@Controller('/user')
-export class UserController extends BaseController {
+@Controller('/patient')
+export class PatientController extends BaseController {
 
   constructor(
-    protected userService: UserService,
+    protected patientService: PatientService,
   ) {
-    super(userService);
+    super(patientService);
   }
 }

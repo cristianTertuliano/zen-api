@@ -1,20 +1,18 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-
-import { UserRepository } from '@module/user/resources/user.repository';
+import { Repository } from 'typeorm';
 
 import { User } from '@core/entity/user/user.entity';
 
 import { BaseService } from '@core/base/base-service';
-import { ContextService } from '@general/services/context.service';
-import { AccountService } from '@module/account/account.service';
+
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService extends BaseService {
   constructor(
-    @InjectRepository(UserRepository)
-    private userRepository: UserRepository,
-    private accountService: AccountService,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,    
   ) {
     super();
   }
@@ -23,77 +21,70 @@ export class UserService extends BaseService {
   * @remarks
   * This method is async.
   *
-  * @param string
-  * @returns user
+  * @param SignupDto
+  * @returns The account object
   *
-
-  public async getOneUserById(
-    userId: string
-
-  ): Promise<User> {
-    const currentAccount = ContextService.currentAccount();
-
-    return await this.userRepository.findOne({
-      where: {
-        accountId: currentAccount.id,
-        id: userId,
-      },
-      relations: [
-        'account'
-      ],
-    });
-  }
 */
-/**
-* @remarks
-* This method is async.
-*
-* @param string
-* @returns user
-*
+public async create(
+  user: any
 
-  public async updateOneUserById(
-    user: User,
+): Promise<User> {
 
-  ): Promise<User> {
-    const currentAccount = ContextService.currentAccount();
+  const secret: {
+    salt: string,
+    password: string,
+  } = await this.generateSecret(user.password);
 
-    user.accountId = currentAccount.id;
-    return await this.userRepository.save(user);
-  }*/
+  user.fullName = this.generateFullName(
+    user.firstName,
+    user.lastName,
+  ),
+
+  user.salt = secret.salt;
+  user.password = secret.password;
+
+  const userCreated = await this.userRepository.save(user);
+
+  delete userCreated.salt;
+  delete userCreated.password;
+
+  return userCreated;
+}
 
 /**
   * @remarks
   * This method is async.
   *
-  * @param UpdateUserPasswordDto
-  * @returns The account object
+  * @param firstName
+  * @param lastName 
+  * @returns string fullname
   *
+*/
+  private generateFullName(
+    firstName: string,
+    lastName: string,
 
-  public async updateOneUserPassword (
-    updateUserPasswordDto: UpdateUserPasswordDto
+  ): string {
+    return firstName.trim() + ' ' + lastName.trim();
+  }
 
-  ): Promise<User> {
-    const hashCode = await this.accountService.getOneAccountCodByHash(
-      updateUserPasswordDto.code
-    );
-    
-    if (hashCode) {
-      if (updateUserPasswordDto.password !== 
-          updateUserPasswordDto.confirmPassword)  {
-        throw new InternalServerErrorException('unmatched password');
-      }
-      updateUserPasswordDto.userId = hashCode.creatorId;
+/**
+  * @remarks
+  * This method is async.
+  *
+  * @param password
+  * @returns string hash
+  *
+*/  
+  private async generateSecret(
+    password: string,
+
+  ): Promise<any> {
+    const salt = await bcrypt.genSalt();
+
+    return {
+      salt: salt,
+      password: await bcrypt.hash(password, salt),
     }
-
-    // invalid hashcode
-    await this.accountService.updateOneAccountCodById({
-      id: hashCode.id,
-      status: AccountCodStatus.Concluded
-    });
-
-    return await this.userRepository.updateOneUserPassword(
-      updateUserPasswordDto
-    );
-  }*/
+  }
 }

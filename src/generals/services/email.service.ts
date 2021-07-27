@@ -22,7 +22,7 @@ export abstract class EmailService extends BaseService {
   * @param EmailOptions
   * @returns void
   *
-
+*/
   protected async sendTransportEmail(
     emailOptions: EmailTransport,
   
@@ -50,5 +50,5 @@ export abstract class EmailService extends BaseService {
     });
  
     return await template.send(emailOptions);
-  }*/  
+  }
 }
