@@ -10,19 +10,17 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
-import { User } from '@core/entity/user/user.entity';
-
 import { BaseController } from '@core/base/base-controller';
 
-import { PatientService } from '@module/patient/patient.service';
+import { UserPatientService } from '@module/patient/patient.service';
  
 
-@Controller('/patient')
-export class PatientController extends BaseController {
+@Controller('/user-patient')
+export class UserPatientController extends BaseController {
 
   constructor(
-    protected patientService: PatientService,
+    protected userPatientService: UserPatientService,
   ) {
-    super(patientService);
+    super(userPatientService);
   }
 }

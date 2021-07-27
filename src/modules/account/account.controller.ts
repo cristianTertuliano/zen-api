@@ -16,7 +16,10 @@ import { AuthGuard } from '@nestjs/passport';
 import { BaseController } from '@core/base/base-controller';
 
 import { AccountService } from '@module/account/account.service';
-import { SignupDto } from 'src/shared/dto/account/signup.dto';
+import { UserPatientService } from '@module/patient/patient.service';
+import { UserProfessionalService } from '@module/professional/professional.service';
+
+import { SignupDtoPatient, SignupDtoProfessional } from 'src/shared/dto/account/signup.dto';
 
 import { Account } from '@core/entity/account/account.entity';
 
@@ -26,15 +29,25 @@ export class AccountController extends BaseController {
 
   constructor(
     protected accountService: AccountService,
+    protected userPatientService: UserPatientService,
+    protected userProfessional: UserProfessionalService,
   ) {
     super(accountService);
   }
 
-  @Post('/signup')
+  @Post('/signup/patient')
   @UsePipes(new ValidationPipe({ whitelist: true }))
-  async createOneAccount(
-    @Body() signupDto: SignupDto
+  async createPacient(
+    @Body() signupDtoPatient: SignupDtoPatient
   ): Promise<Account> {
-    return await this.accountService.create(signupDto);
+    return await this.userPatientService.create(signupDtoPatient);
   }
+
+  @Post('/signup/professional')
+  @UsePipes(new ValidationPipe({ whitelist: true }))
+  async createProfessional(
+    @Body() signupDtoProfessional: SignupDtoProfessional
+  ): Promise<Account> {
+    return await this.userProfessional.create(signupDtoProfessional);
+  }  
 }

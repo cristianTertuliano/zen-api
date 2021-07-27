@@ -14,7 +14,6 @@ import { ContextService } from '@general/services/context.service';
     TypeOrmModule.forFeature([
       User,
     ]),
-    AccountModule
   ],
   controllers: [UserController],
   providers: [

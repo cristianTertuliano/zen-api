@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 
-import { User } from '@core/entity/user/user.entity';
+import { SignupDtoPatient } from 'src/shared/dto/account/signup.dto';
 
 import { BaseService } from '@core/base/base-service';
+import { AccountService } from '@module/account/account.service';
+
+import { TypeUser } from '@core/entity/user/user.entity';
+import { Account } from '@core/entity/account/account.entity';
+
 
 @Injectable()
-export class PatientService extends BaseService {
+export class UserPatientService extends BaseService {
   constructor(
-    @InjectRepository(User)
-    private userRepository: User,
+    protected accountService: AccountService,
   ) {
     super();
   }
@@ -18,24 +21,16 @@ export class PatientService extends BaseService {
   * @remarks
   * This method is async.
   *
-  * @param string
-  * @returns user
+  * @param signupDtoPatient
+  * @returns The account patient object
   *
+*/
+  public async create(
+    signupDtoPatient: SignupDtoPatient
 
-  public async getOneUserById(
-    userId: string
+  ): Promise<Account> {
+    signupDtoPatient.type = TypeUser.Patient;
 
-  ): Promise<User> {
-    const currentAccount = ContextService.currentAccount();
-
-    return await this.userRepository.findOne({
-      where: {
-        accountId: currentAccount.id,
-        id: userId,
-      },
-      relations: [
-        'account'
-      ],
-    });
-  }*/
+    return await this.accountService.create(signupDtoPatient);
+  }
 }
