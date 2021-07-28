@@ -31,6 +31,6 @@ export class UserPatientService extends BaseService {
   ): Promise<Account> {
     signupDtoPatient.type = TypeUser.Patient;
 
-    return await this.accountService.create(signupDtoPatient);
+    return await this.accountService.signup(signupDtoPatient);
   }
 }

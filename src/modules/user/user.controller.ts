@@ -1,9 +1,6 @@
 import { 
   Controller,
-  Body,
   Get,
-  Put,
-  Param,
   UsePipes,
   ValidationPipe,
   UseGuards
@@ -16,7 +13,7 @@ import { BaseController } from '@core/base/base-controller';
 
 import { UserService } from '@module/user/user.service';
  
-// @UseGuards(AuthGuard())
+@UseGuards(AuthGuard('jwt'))
 @Controller('/user')
 export class UserController extends BaseController {
 

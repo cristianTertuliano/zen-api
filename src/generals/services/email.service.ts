@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import * as nodemailer from 'nodemailer';
-import * as EmailTemplate from 'email-templates';
-
 import { smtp } from '@core/config/smtp-config';
 import { BaseService } from '@core/base/base-service';
+
+import * as nodemailer from 'nodemailer';
+import * as EmailTemplate from 'email-templates';
 
 interface EmailTransport {
   template: string;
