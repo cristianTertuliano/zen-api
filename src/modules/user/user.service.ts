@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { User } from '@core/entity/user/user.entity';
+import { TypeUser, User } from '@core/entity/user/user.entity';
 
 import { BaseService } from '@core/base/base-service';
 
@@ -16,6 +16,46 @@ export class UserService extends BaseService {
   ) {
     super();
   }
+
+/**
+  * @remarks
+  * This method is async.
+  *
+  * @param void
+  * @returns list patients
+  *
+*/
+  public async findAllPatient(): Promise<User[]> {
+    return await this.userRepository.find({
+      where: {
+        type: TypeUser.Patient
+      },
+      relations: [
+        'account',
+      ],      
+    });
+  }
+
+/**
+  * @remarks
+  * This method is async.
+  *
+  * @param void
+  * @returns list professionals
+  *
+*/
+public async findAllProfessional(): Promise<User[]> {
+  return await this.userRepository.find({
+    where: {
+      type: TypeUser.Professional
+    },
+    relations: [
+      'account',
+      'professional',
+      'schedule',
+    ],
+  });
+}  
 
 /**
   * @remarks

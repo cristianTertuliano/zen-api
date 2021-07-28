@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne, RelationId, OneToMany, Unique, Index } from "typeorm";
+import { Column, Entity, OneToOne, RelationId, OneToMany, Unique, Index, JoinTable, JoinColumn } from "typeorm";
 import {
   IsBoolean,
   IsEmail,
@@ -34,13 +34,16 @@ export class User extends BaseResourceEntity {
 
   // Relations One to One
   @OneToOne(() => Account, account => account.user)
+  @JoinColumn()
   account: Account;
 
   @OneToOne(() => UserProfessional, userProfessional => userProfessional.user)
+  @JoinColumn()
   professional: UserProfessional;
 
   @OneToOne(() => Schedule, schedule => schedule.user)
-  schedule: Schedule;    
+  @JoinColumn()
+  schedule: Schedule;
 
   // Relations One to many
   @OneToMany(() => Email, email => email.creator)
@@ -55,6 +58,16 @@ export class User extends BaseResourceEntity {
   @IsString()
   @RelationId((user: User) => user.account)
   accountId: string;
+
+  @Column({ nullable: true })
+  @IsString()
+  @RelationId((user: User) => user.schedule)
+  scheduleId: string;  
+
+  @Column({ nullable: true })
+  @IsString()
+  @RelationId((user: User) => user.professional)
+  professionalId: string; 
 
   @Column()
   @IsOptional()

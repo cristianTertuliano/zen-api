@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne, RelationId, Index } from "typeorm";
+import { Column, Entity, OneToOne, RelationId, Index, JoinColumn } from "typeorm";
 import {
   IsEnum,
   IsNotEmpty,
@@ -26,6 +26,7 @@ export class UserProfessional extends BaseResourceEntity {
   account: Account;
 
   @OneToOne(() => User, user => user.professional)
+  @JoinColumn()
   user: User;  
 
   // Columns

@@ -3,6 +3,8 @@ import {
   Entity,
   OneToOne,
   OneToMany,
+  JoinColumn,
+  JoinTable,
 } from "typeorm";
 import { IsBoolean, IsNotEmpty } from 'class-validator';
 
@@ -17,7 +19,9 @@ import { Schedule } from "@core/entity/schedule/schedule.entity";
 export class Account extends BaseResourceEntity {
 
   // Relations One to One
+ 
   @OneToOne(() => User, user => user.account)
+  @JoinColumn()
   user: User;
 
   @OneToOne(() => UserProfessional, userProfessional => userProfessional.account)
