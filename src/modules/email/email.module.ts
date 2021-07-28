@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { EmailController } from '@module/email/email.controller';
 import { Email } from '@core/entity/email/email.entity';
 
 @Module({
@@ -10,7 +9,7 @@ import { Email } from '@core/entity/email/email.entity';
       Email,
     ]),
   ],  
-  controllers: [EmailController],
+  controllers: [],
   providers: []
 })
 export class EmailModule {}
