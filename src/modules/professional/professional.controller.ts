@@ -15,7 +15,7 @@ import { BaseController } from '@core/base/base-controller';
 import { UserProfessionalService } from '@module/professional/professional.service';
  
 
-@Controller('/user-professional')
+@Controller('/professional')
 export class UserProfessionalController extends BaseController {
 
   constructor(

@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne, RelationId, Index } from "typeorm";
+import { Column, Entity, OneToOne, RelationId, Index, JoinTable, JoinColumn } from "typeorm";
 import {
   IsEnum,
   IsNotEmpty,
@@ -19,6 +19,7 @@ export class Schedule extends BaseResourceEntity {
   account: Account;
 
   @OneToOne(() => User, user => user.schedule)
+  @JoinColumn()
   user: User;  
 
   // Columns
@@ -32,5 +33,5 @@ export class Schedule extends BaseResourceEntity {
   @IsNotEmpty()
   @IsString()
   @RelationId((schedule: Schedule) => schedule.user)
-  professionalId: string;
+  userId: string;
 }

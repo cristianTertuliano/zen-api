@@ -8,9 +8,10 @@ import { AccountService } from '@module/account/account.service';
 import { SignupDtoProfessional } from 'src/shared/dto/account/signup.dto';
 
 import { UserProfessional } from '@core/entity/user/user-professional.entity';
-import { TypeUser } from '@core/entity/user/user.entity';
+import { TypeUser, User } from '@core/entity/user/user.entity';
 import { Account } from '@core/entity/account/account.entity';
 import { Schedule } from '@core/entity/schedule/schedule.entity';
+import { scheduled } from 'rxjs';
 
 @Injectable()
 export class UserProfessionalService extends BaseService {
@@ -49,7 +50,13 @@ export class UserProfessionalService extends BaseService {
     // data schedule professional
     account.user.schedule = await getRepository(Schedule).save({
       accountId: account.id,
-      professionalId: account.user.id,
+      userId: account.user.id,
+    });
+
+    await getRepository(User).save({
+      id: account.user.id,
+      professional: account.user.professional,
+      schedule: account.user.schedule,
     });
 
     return account;
