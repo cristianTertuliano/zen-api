@@ -37,7 +37,7 @@ export class UserProfessionalService extends BaseService {
   ): Promise<Account> {
     signupDtoProfessional.type = TypeUser.Professional;
 
-    const account = await this.accountService.create(signupDtoProfessional);
+    const account = await this.accountService.signup(signupDtoProfessional);
 
     // data professional
     account.user.professional = await getRepository(UserProfessional).save({

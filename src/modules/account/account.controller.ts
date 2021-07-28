@@ -1,17 +1,11 @@
 import { 
   Controller,
-  Param,
-  Get,
   Body,
   Post,
-  Put,
   UsePipes,
   ValidationPipe,
   Req,
-  Delete,
-  UseGuards
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 
 import { BaseController } from '@core/base/base-controller';
 
@@ -19,10 +13,13 @@ import { AccountService } from '@module/account/account.service';
 import { UserPatientService } from '@module/patient/patient.service';
 import { UserProfessionalService } from '@module/professional/professional.service';
 
-import { SignupDtoPatient, SignupDtoProfessional } from 'src/shared/dto/account/signup.dto';
+import { SigninDto } from 'src/shared/dto/account/signin.dto';
+import {
+  SignupDtoPatient,
+  SignupDtoProfessional,
+} from 'src/shared/dto/account/signup.dto';
 
 import { Account } from '@core/entity/account/account.entity';
-
 
 @Controller('/account')
 export class AccountController extends BaseController {
@@ -33,6 +30,18 @@ export class AccountController extends BaseController {
     protected userProfessional: UserProfessionalService,
   ) {
     super(accountService);
+  }
+
+  @Post('/signin')
+  @UsePipes(new ValidationPipe({ whitelist: true }))
+  async getOneAuthenticate(
+    @Body() signinDto: SigninDto,
+    @Req() req
+  ): Promise<any> {
+    return await this.accountService.signin(
+      signinDto,
+      req
+    );
   }
 
   @Post('/signup/patient')
@@ -49,5 +58,5 @@ export class AccountController extends BaseController {
     @Body() signupDtoProfessional: SignupDtoProfessional
   ): Promise<Account> {
     return await this.userProfessional.create(signupDtoProfessional);
-  }  
+  }
 }

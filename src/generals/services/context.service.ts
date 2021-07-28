@@ -24,15 +24,15 @@ export class ContextService {
 		return requestContext?.request;
 	}
 
-	// public static currentAccount(): Account {
-	// 	const requestContext = ContextService.currentRequestContext();
-	// 	return requestContext?.request['user'].account;
-	// }
+	public static currentAccount(): Account {
+		const requestContext = ContextService.currentRequestContext();
+		return requestContext?.request['user'].account;
+	}
 
-	// public static currentUser(): User {
-	// 	const requestContext = ContextService.currentRequestContext();
-	// 	return requestContext?.request['user'].user;
-	// }
+	public static currentUser(): User {
+		const requestContext = ContextService.currentRequestContext();
+		return requestContext?.request['user'].user;
+	}
 
 	public static currentPermissions() {
 		/* code */
