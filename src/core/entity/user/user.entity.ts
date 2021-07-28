@@ -41,10 +41,6 @@ export class User extends BaseResourceEntity {
   @JoinColumn()
   professional: UserProfessional;
 
-  @OneToOne(() => Schedule, schedule => schedule.user)
-  @JoinColumn()
-  schedule: Schedule;
-
   // Relations One to many
   @OneToMany(() => Email, email => email.creator)
   emails: Email[]
@@ -52,17 +48,15 @@ export class User extends BaseResourceEntity {
   @OneToMany(() => UserSession, session => session.user)
   sessions: UserSession[];
 
+  @OneToMany(() => Schedule, schedule => schedule.user)
+  schedules: Schedule[]
+
   // Columns
   @Column()
   @IsNotEmpty()  
   @IsString()
   @RelationId((user: User) => user.account)
   accountId: string;
-
-  @Column({ nullable: true })
-  @IsString()
-  @RelationId((user: User) => user.schedule)
-  scheduleId: string;  
 
   @Column({ nullable: true })
   @IsString()

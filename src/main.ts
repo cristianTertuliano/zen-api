@@ -29,6 +29,6 @@ async function bootstrap() {
   console.log('Welcome zen-api ')
   console.log('Created by Cristian Tertuliano')
   console.log('----------------------')
-  console.log(`Listining in ${config.get('enviroment')} mod `);
+  console.log(`Listining in dev mod `);
 }
 bootstrap();

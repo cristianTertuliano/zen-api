@@ -9,7 +9,7 @@ import { JwtStrategy } from '@general/services/jwt-strategy';
 import { AccountController } from '@module/account/account.controller';
 
 import { AccountService } from '@module/account/account.service';
-import { EmailAccountService } from '@module/email/email-account.service';
+import { EmailAccountService } from '@module/email/account/account.service';
 import { UserService } from '@module/user/user.service';
 import { UserPatientService } from '@module/patient/patient.service';
 import { UserProfessionalService } from '@module/professional/professional.service';

@@ -11,6 +11,7 @@ import { UserModule } from '@module/user/user.module';
 import { UserProfessionalModule } from '@module/professional/professional.module';
 import { UserPatientModule } from '@module/patient/patient.module';
 import { EmailModule } from '@module/email/email.module';
+import { ScheduleModule } from '@module/schedule/schedule.module';
 
 
 @Module({
@@ -26,6 +27,7 @@ import { EmailModule } from '@module/email/email.module';
     EmailModule,
     UserProfessionalModule,
     UserPatientModule,
+    ScheduleModule,
 
     // shared all
     GeneralsModule,

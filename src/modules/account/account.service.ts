@@ -11,7 +11,7 @@ import { JwtPayload } from 'src/shared/interfaces/account/jwt-payload.interface'
 
 import { BaseService } from '@core/base/base-service';
 import { UserService } from '@module/user/user.service';
-import { EmailAccountService } from '@module/email/email-account.service';
+import { EmailAccountService } from '@module/email/account/account.service';
 
 import { SigninDto } from 'src/shared/dto/account/signin.dto';
 import { User } from '@core/entity/user/user.entity';
