@@ -1,9 +1,7 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-
-import { BaseService } from '@core/base/base-service';
+import { BadRequestException } from '@nestjs/common';
+import { getRepository } from 'typeorm';
 
 import { DayWeekSchedule, Schedule } from "@core/entity/schedule/schedule.entity";
-import { getRepository } from 'typeorm';
 
 import * as moment from 'moment';
 
@@ -17,14 +15,8 @@ export enum DayWeekScheduleUtil {
   WeekDay0 = 'sunday',
 }
 
-@Injectable()
-export class ScheduleUtil extends BaseService {
+class ScheduleUtil {
   public timeFormat = 'HH:mm:ss';
-
-  constructor(
-  ) {
-    super();
-  }
 
 /**
   * @remarks
@@ -106,4 +98,19 @@ export class ScheduleUtil extends BaseService {
       );
     }
   }
+
+/**
+  * @remarks
+  *
+  * @param dayAt
+  * @returns day week
+  *
+*/   
+  public checkDayWeekByDay(dayAt) {
+    return DayWeekScheduleUtil[
+      'WeekDay' + moment(dayAt).weekday()
+    ];
+  } 
 }
+
+export default new ScheduleUtil();

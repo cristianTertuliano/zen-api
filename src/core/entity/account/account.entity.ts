@@ -4,7 +4,6 @@ import {
   OneToOne,
   OneToMany,
   JoinColumn,
-  JoinTable,
 } from "typeorm";
 import { IsBoolean, IsNotEmpty } from 'class-validator';
 
