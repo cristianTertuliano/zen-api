@@ -65,7 +65,6 @@ export class AccountService extends BaseService{
       relations: [
         'account',
         'professional',
-        'schedule',
       ],
     });
 

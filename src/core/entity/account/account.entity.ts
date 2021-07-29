@@ -14,6 +14,7 @@ import { Email } from "@core/entity/email/email.entity";
 import { UserSession } from "@core/entity/user/user-session.entity";
 import { UserProfessional } from "@core/entity/user/user-professional.entity";
 import { Schedule } from "@core/entity/schedule/schedule.entity";
+import { Scheduling } from "@core/entity/schedule/scheduling.entity";
 
 @Entity()
 export class Account extends BaseResourceEntity {
@@ -36,6 +37,9 @@ export class Account extends BaseResourceEntity {
 
   @OneToMany(() => UserSession, session => session.account)
   sessions: UserSession[];
+
+  @OneToMany(() => Scheduling, scheduling => scheduling.account)
+  schedulings: Scheduling[];
 
   // Relations Many to One
 

@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne, RelationId, OneToMany, Unique, Index, JoinTable, JoinColumn } from "typeorm";
+import { Column, Entity, OneToOne, RelationId, OneToMany, Unique, Index, JoinColumn } from "typeorm";
 import {
   IsBoolean,
   IsEmail,
@@ -16,6 +16,7 @@ import { Account } from "@core/entity/account/account.entity";
 import { UserSession } from "@core/entity/user/user-session.entity";
 import { UserProfessional } from "@core/entity/user/user-professional.entity";
 import { Schedule } from "@core/entity/schedule/schedule.entity";
+import { Scheduling } from "@core/entity/schedule/scheduling.entity";
 
 export enum TypeUser {
   Professional = 'professional',
@@ -50,6 +51,12 @@ export class User extends BaseResourceEntity {
 
   @OneToMany(() => Schedule, schedule => schedule.user)
   schedules: Schedule[]
+
+  @OneToMany(() => Scheduling, scheduling => scheduling.patient)
+  schedulingsPatient: Scheduling[]
+
+  @OneToMany(() => Scheduling, scheduling => scheduling.professional)
+  schedulingsProfessional: Scheduling[]
 
   // Columns
   @Column()

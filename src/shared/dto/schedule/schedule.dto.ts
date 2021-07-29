@@ -3,7 +3,6 @@ import {
   IsEnum,
   IsIn,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString
 } from "class-validator";
@@ -11,6 +10,26 @@ import {
 import { Account } from "@core/entity/account/account.entity";
 import { User } from "@core/entity/user/user.entity";
 import { DayWeekSchedule } from "@core/entity/schedule/schedule.entity";
+
+export class ScheduleGetDto {
+
+  @IsNotEmpty()
+  @IsDateString()
+  dayAt?: Date;
+
+  @IsOptional()
+  @IsEnum(DayWeekSchedule)
+  @IsIn([
+    DayWeekSchedule.Monday,
+    DayWeekSchedule.Tuesday,
+    DayWeekSchedule.Wednesday,
+    DayWeekSchedule.Thursday,
+    DayWeekSchedule.Friday,
+    DayWeekSchedule.Saturday,
+    DayWeekSchedule.Sunday,  
+  ])  
+  dayWeek?: DayWeekSchedule;  
+}
 
 export class ScheduleUpdateDto {
 
