@@ -69,8 +69,7 @@ export class Scheduling extends BaseResourceEntity {
 
   @Index()
   @Column({
-    type: 'datetime',
-    precision: 0,
+    type: 'date',
     nullable: true,
   })
   @IsNotEmpty()
@@ -82,7 +81,6 @@ export class Scheduling extends BaseResourceEntity {
   @Column({
     type: 'time'
   })
-  @IsNotEmpty()
   timeStartAt: Date;
 
   @Index()
@@ -90,6 +88,5 @@ export class Scheduling extends BaseResourceEntity {
   @Column({
     type: 'time'
   })
-  @IsNotEmpty()
   timeEndAt: Date;
 }

@@ -1,28 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { getRepository, Repository } from 'typeorm';
 
 import { BaseService } from '@core/base/base-service';
 
-import {
-  Schedule,
-} from '@core/entity/schedule/schedule.entity';
+import { Schedule } from '@core/entity/schedule/schedule.entity';
+import { TypeUser } from '@core/entity/user/user.entity';
 
-import { DayWeekScheduleUtil, ScheduleUtil } from 'src/shared/util/schedule/schedule.util';
-import { SchedulingUtil } from 'src/shared/util/scheduling/scheduling.util';
-import { UserProfessionalUtil } from 'src/shared/util/user/professional.util';
+import UserUtil from 'src/shared/util/user/user';
+import ScheduleUtil from 'src/shared/util/schedule/schedule';
+import SchedulingUtil from 'src/shared/util/scheduling/scheduling';
+
 import { ScheduleGetDto, ScheduleUpdateDto } from 'src/shared/dto/schedule/schedule.dto';
-
-import * as moment from 'moment';
 
 @Injectable()
 export class ScheduleService extends BaseService {
   constructor(
     @InjectRepository(Schedule)
     private scheduleRepository: Repository<Schedule>,
-    private scheduleUtil: ScheduleUtil,
-    private schedulingUtil: SchedulingUtil,
-    private userProfessionalUtil: UserProfessionalUtil,
   ) {
     super();
   }
@@ -42,11 +37,9 @@ export class ScheduleService extends BaseService {
   ): Promise<Schedule | any> {
     let schedule: Schedule;
 
-    await this.userProfessionalUtil.checkValidProfessional(userId);
+    await UserUtil.checkValidUser(userId, TypeUser.Professional);
 
-    const dayWeek = DayWeekScheduleUtil[
-      'WeekDay' + moment(scheduleGetDto.dayAt).weekday()
-    ];
+    const dayWeek = ScheduleUtil.checkDayWeekByDay(scheduleGetDto.dayAt);
 
     schedule = await this.scheduleRepository.findOne({
       userId: userId,
@@ -54,28 +47,26 @@ export class ScheduleService extends BaseService {
     });
 
     if (schedule && schedule.isBlocked) {
-      return {
-        code: '200',
-        message: 'Este dia está bloqueado na agenda deste profissional'
-      };
+      throw new BadRequestException(
+        'Este dia está bloqueado na agenda deste profissional'
+      );
     }
 
     if (!schedule) {
-      return {
-        code: '200',
-        message: 'Este profissional não atende neste dia'
-      };
+      throw new BadRequestException(
+        'Este profissional não atende neste dia'
+      );
     }    
- 
+
     const slots: any[] = [];
 
     schedule.slots.forEach(slot => slots.push(slot));
-  
-    schedule.slots = await this.schedulingUtil.generateSlotsAvaiable(
+
+    schedule.slots = await SchedulingUtil.generateSlotsAvaiable(
       userId,
       scheduleGetDto,
       slots,
-    );  
+    );
   
     return schedule;
   }
@@ -95,19 +86,19 @@ export class ScheduleService extends BaseService {
 
   ): Promise<Schedule> {
 
-    const professional = await this.userProfessionalUtil.checkValidProfessional(userId);
+    const user = await UserUtil.checkValidUser(userId, TypeUser.Professional);
 
-    await this.scheduleUtil.checkValidDayWeek(userId, scheduleBody.dayWeek);
+    await ScheduleUtil.checkValidDayWeek(userId, scheduleBody.dayWeek);
 
-    this.scheduleUtil.checkValidRangeTimeAt(
+    ScheduleUtil.checkValidRangeTimeAt(
       scheduleBody.timePeriodStartAt,
       scheduleBody.timePeriodEndAt,
     );
 
-    scheduleBody.accountId = professional.accountId;
-    scheduleBody.userId = professional.userId;
+    scheduleBody.accountId = user.accountId;
+    scheduleBody.userId = user.id;
 
-    scheduleBody.slots = this.scheduleUtil.generateSlots(
+    scheduleBody.slots = ScheduleUtil.generateSlots(
       scheduleBody.timePeriodStartAt,
       scheduleBody.timePeriodEndAt,      
     );
@@ -133,12 +124,12 @@ export class ScheduleService extends BaseService {
 
     if (scheduleBody.timePeriodStartAt && 
         scheduleBody.timePeriodEndAt) {
-      this.scheduleUtil.checkValidRangeTimeAt(
+      ScheduleUtil.checkValidRangeTimeAt(
         scheduleBody.timePeriodStartAt,
         scheduleBody.timePeriodEndAt,
       );
 
-      scheduleBody.slots = this.scheduleUtil.generateSlots(
+      scheduleBody.slots = ScheduleUtil.generateSlots(
         scheduleBody.timePeriodStartAt,
         scheduleBody.timePeriodEndAt,      
       );    
@@ -151,7 +142,7 @@ export class ScheduleService extends BaseService {
       id: scheduleBody.id,
     });
 
-    await this.scheduleUtil.checkValidDayWeek(schedule.userId, scheduleBody.dayWeek);
+    await ScheduleUtil.checkValidDayWeek(schedule.userId, scheduleBody.dayWeek);
  
     await this.scheduleRepository.save(scheduleBody);
 

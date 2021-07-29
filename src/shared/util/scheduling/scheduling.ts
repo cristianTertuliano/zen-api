@@ -1,18 +1,10 @@
-import { Injectable } from '@nestjs/common';
 
-import { BaseService } from '@core/base/base-service';
-
+import { getRepository } from 'typeorm';
 import { ScheduleGetDto } from 'src/shared/dto/schedule/schedule.dto';
 import { SlotsTimeInterface } from 'src/shared/interfaces/user/professional.interface';
-import { SchedulingService } from '@module/scheduling/scheduling.service';
+import { Scheduling } from '@core/entity/schedule/scheduling.entity';
 
-@Injectable()
-export class SchedulingUtil extends BaseService {
-  constructor(
-    private schedulingService: SchedulingService,
-  ) {
-    super();
-  }
+class SchedulingUtil {
 
 /**
   * @remarks
@@ -34,13 +26,13 @@ export class SchedulingUtil extends BaseService {
 
     const slotsAvaiable: SlotsTimeInterface[] = [];
 
-    // verify exist scheduling for day especific
-    const schedulings = await this.schedulingService.findAllByProfessional(
-      professionalId, { 
-        dayAt: scheduleGetDto.dayAt,
+    const schedulings = await getRepository(Scheduling).find({
+      where: {
+        professionalId: professionalId,
         dayWeek: scheduleGetDto.dayWeek,
+        dayAt: scheduleGetDto.dayAt,        
       }
-    );
+    });
 
     // remove slots used
     for (let indexSlot = 0; slotsProfessional.length > indexSlot; indexSlot++) {
@@ -51,7 +43,7 @@ export class SchedulingUtil extends BaseService {
         scheduling.timeStartAt <= slotsProfessional[indexSlot].timeSlotEndAt) || 
         (scheduling.timeEndAt <= slotsProfessional[indexSlot].timeSlotEndAt && 
         scheduling.timeEndAt >= slotsProfessional[indexSlot].timeSlotStartAt)) {
-          delete slotsProfessional[indexSlot];
+          insertSlot = false;
         }
       }
 
@@ -63,3 +55,5 @@ export class SchedulingUtil extends BaseService {
     return slotsAvaiable;
   }
 }
+
+export default new SchedulingUtil();
